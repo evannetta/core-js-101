@@ -53,8 +53,19 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  let leap;
+  if (year % 4) {
+    leap = false;
+  } else if (year % 100) {
+    leap = true;
+  } else if (year % 400) {
+    leap = false;
+  } else {
+    leap = true;
+  }
+  return leap;
 }
 
 
@@ -73,8 +84,26 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const milliseconds = endDate.getTime() - startDate.getTime();
+  const milsec = parseInt(milliseconds % 1000, 10);
+  const sec = parseInt((milliseconds / 1000) % 60, 10);
+  const min = parseInt((milliseconds / (1000 * 60)) % 60, 10);
+  const hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24, 10);
+  let str = hours < 10 ? `0${hours}` : `${hours}`;
+  str += ':';
+  str += min < 10 ? `0${min}` : `${min}`;
+  str += ':';
+  str += sec < 10 ? `0${sec}` : `${sec}`;
+  str += '.';
+  if (milsec < 10) {
+    str += `00${milsec}`;
+  } else if (milsec < 100) {
+    str += `0${milsec}`;
+  } else {
+    str += `${milsec}`;
+  }
+  return str;
 }
 
 
